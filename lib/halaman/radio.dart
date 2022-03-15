@@ -2,13 +2,10 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-// import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -22,10 +19,7 @@ class SwaraKendal extends StatefulWidget {
 
 class _SwaraKendalState extends State<SwaraKendal> {
   AudioPlayer audioPlayer = AudioPlayer();
-  Duration duration = const Duration();
-  Duration position = const Duration();
 
-  bool playing = false;
   void getAudio() async {
     var url = "http://i.klikhost.com/8822/stream/";
     setState(() {
@@ -36,7 +30,8 @@ class _SwaraKendalState extends State<SwaraKendal> {
   static var today = DateTime.now();
   var formatedTanggal = DateFormat.yMMMd().format(today);
   late String _timeString;
-  late String _DayString;
+  late String _dayString;
+  late String _hari;
 
   String _formatDateTime(DateTime dateTime) {
     return DateFormat(
@@ -54,6 +49,13 @@ class _SwaraKendalState extends State<SwaraKendal> {
     ).format(dateTime);
   }
 
+  String _formatHari(DateTime dateTime) {
+    return DateFormat(
+      'EEEEE',
+      'id_ID',
+    ).format(dateTime);
+  }
+
   Future _getTime() async {
     initializeDateFormatting('id_ID', null);
     final DateTime now = DateTime.now();
@@ -65,6 +67,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
         },
       );
     }
+    print("jam" + _timeString);
     return formattedDateTime;
   }
 
@@ -75,31 +78,39 @@ class _SwaraKendalState extends State<SwaraKendal> {
     if (mounted) {
       setState(
         () {
-          _DayString = formattedDateDay;
+          _dayString = formattedDateDay;
         },
       );
     }
     return formattedDateDay;
   }
 
-  // late VideoPlayerController videoPlayerController;
-  // late Future<void> videoPlayerFuture;
+  Future _getHari() async {
+    initializeDateFormatting('id_ID', null);
+    final DateTime now = DateTime.now();
+    final String formattedHari = _formatHari(now);
+    if (mounted) {
+      setState(
+        () {
+          _hari = formattedHari;
+        },
+      );
+    }
+    return formattedHari;
+  }
 
   @override
   void initState() {
     super.initState();
-    _getDay();
     getAudio();
+    _getDay();
+    _getHari();
     initializeDateFormatting();
     _timeString = _formatDateTime(DateTime.now());
-    _DayString = _formatDateDay(DateTime.now());
-    // Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
+    _dayString = _formatDateDay(DateTime.now());
+    _hari = _formatHari(DateTime.now());
+    Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
     Wakelock.enable();
-    // videoPlayerController =
-    //     VideoPlayerController.network('http://i.klikhost.com/8822/stream');
-    // videoPlayerFuture = videoPlayerController.initialize();
-
-    // videoPlayerController.setLooping(false);
   }
 
   @override
@@ -143,7 +154,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _DayString,
+            _dayString,
             style: TextStyle(
               color: Colors.brown[800],
               fontWeight: FontWeight.bold,
@@ -163,12 +174,12 @@ class _SwaraKendalState extends State<SwaraKendal> {
         children: [
           Container(
             padding: const EdgeInsets.only(
-              top: 20,
-              left: 20,
-              right: 20,
+              top: 15,
+              left: 15,
+              right: 15,
             ),
             width: mediaQueryData.size.width,
-            height: mediaQueryData.size.height * 0.58,
+            height: mediaQueryData.size.height * 0.6,
             decoration: const BoxDecoration(
               color: Color(0xFFe97b65),
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -308,12 +319,14 @@ class _SwaraKendalState extends State<SwaraKendal> {
     return Container(
       padding: const EdgeInsets.all(10),
       width: mediaQueryData.size.width,
-      height: mediaQueryData.size.height * 0.25,
+      height: mediaQueryData.size.height * 0.29,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(20.0)),
       ),
       child: Column(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -330,7 +343,6 @@ class _SwaraKendalState extends State<SwaraKendal> {
                   ),
                   primary: const Color(0xFFe97b65),
                 ),
-
                 label: const Text(
                   'Siaran saat ini',
                   style: TextStyle(
@@ -342,6 +354,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
                   color: Colors.white,
                   size: 20,
                 ),
+                //text
                 // textColor: Color(0xFFe97b65),
                 // splashColor: Colors.red,
                 // color: Colors.white,
@@ -356,7 +369,50 @@ class _SwaraKendalState extends State<SwaraKendal> {
             ],
           ),
           _running(),
-          const Divider(),
+          // const Divider(),
+          Row(
+            children: [
+              ElevatedButton.icon(
+                // elevation: 0,
+                onPressed: () async {
+                  //
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                  ),
+                  primary: Colors.grey,
+                ),
+                label: const Text(
+                  'Acara Selanjutnya',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                icon: const FaIcon(
+                  FontAwesomeIcons.angleDoubleRight,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                //text
+                // textColor: Color(0xFFe97b65),
+                // splashColor: Colors.red,
+                // color: Colors.white,
+              ),
+              // Padding(
+              //     padding: EdgeInsets.only(
+              //         right: mediaQueryData.size.height * 0.01)),
+              // const SpinKitDoubleBounce(
+              //   color: Color(0xFFe97b65),
+              //   size: 30,
+              // ),
+            ],
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: mediaQueryData.size.height * 0.01)),
+          _runningnext()
           // Expanded(
           //   child: SizedBox(
           //     child: Marquee(
@@ -375,6 +431,81 @@ class _SwaraKendalState extends State<SwaraKendal> {
   }
 
   Widget _running() {
+    var siaran;
+    if (_hari == 'Senin' ||
+        _hari == 'Selasa' ||
+        _hari == 'Rabu' ||
+        _hari == 'Kamis' ||
+        _hari == 'Jumat' ||
+        _hari == 'Sabtu' ||
+        _hari == 'Minggu') {
+      if (_timeString == '06') {
+        siaran = "PACU SEMANGAT";
+      } else if (_timeString == '07' || _timeString == '08') {
+        siaran = "BERANDA KITA";
+      } else if (_timeString == '09' || _timeString == '10') {
+        if (_hari == 'Minggu') {
+          siaran = "DUNIA ANAK (09.00-09.30) & CERITA NUSANTARA (09.30-10.00)";
+        } else {
+          siaran = "PASAR SWARA KENDAL";
+        }
+      } else if (_timeString == '11' || _timeString == '12') {
+        if (_hari == 'Minggu') {
+          siaran = "RHOMANIA";
+        } else {
+          siaran = "ES CAMPUR";
+        }
+      } else if (_timeString == '13') {
+        if (_hari == 'Minggu') {
+          siaran = "SEJENAK BERSAMA";
+        } else {
+          siaran = "REHAT SIANG";
+        }
+      } else if (_timeString == '14' || _timeString == '15') {
+        if (_hari == 'Sabtu') {
+          siaran = "FBI";
+        } else if (_hari == 'Minggu') {
+          siaran = "SLANK MANIA";
+        } else {
+          siaran = "MUSIK INDO";
+        }
+      } else if (_timeString == '16' || _timeString == '17') {
+        if (_hari == 'Minggu') {
+          siaran = "MUSIKIDI (16.00-17.00) & IWAN FALS(17.00-18.00)";
+        } else {
+          siaran = "JJS";
+        }
+      } else if (_timeString == '18') {
+        if (_hari == 'Sabtu') {
+          siaran = "RISALAH (18.30-19.00)";
+        } else if (_hari == 'Minggu') {
+          siaran = "REBANA LOKAL (18.30-19.00)";
+        } else {
+          siaran = "BAHANA SWARA KENDAL";
+        }
+      } else if (_timeString == '19' || _timeString == '20') {
+        if (_hari == 'Minggu') {
+          siaran =
+              "Hikmah dibalik Kisah (19.00-20.00) & MIMBAR KRISTEN(20.00-20.30) & MIMBAR KATOLIK(20.30-21.00)";
+        } else {
+          siaran = "PLANET GAUL";
+        }
+      } else if (_timeString == '21') {
+        if (_hari == 'Jumat') {
+          siaran = "KOESPLUS MANIA";
+        } else {
+          siaran = "MELODI KENANGAN";
+        }
+      } else if (_timeString == '22' || _timeString == '23') {
+        if (_hari == 'Jumat') {
+          siaran = "LANOSDA";
+        } else {
+          siaran = "GADO GADO";
+        }
+      } else {
+        siaran = "OFFLINE";
+      }
+    }
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Container(
       // padding: const EdgeInsets.all(10),
@@ -389,15 +520,114 @@ class _SwaraKendalState extends State<SwaraKendal> {
           Expanded(
             child: SizedBox(
               child: Marquee(
-                text: 'Sunday Morning',
+                text: siaran.toString(),
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
                 blankSpace: 30.0,
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  Widget _runningnext() {
+    var siaran;
+    if (_hari == 'Senin' ||
+        _hari == 'Selasa' ||
+        _hari == 'Rabu' ||
+        _hari == 'Kamis' ||
+        _hari == 'Jumat' ||
+        _hari == 'Sabtu' ||
+        _hari == 'Minggu') {
+      if (_timeString == '06') {
+        siaran = "BERANDA KITA";
+      } else if (_timeString == '07' || _timeString == '08') {
+        if (_hari == 'Minggu') {
+          siaran = "DUNIA ANAK (09.00-09.30) & CERITA NUSANTARA (09.30-10.00)";
+        } else {
+          siaran = "PASAR SWARA KENDAL";
+        }
+      } else if (_timeString == '09' || _timeString == '10') {
+        if (_hari == 'Minggu') {
+          siaran = "RHOMANIA";
+        } else {
+          siaran = "ES CAMPUR";
+        }
+      } else if (_timeString == '11' || _timeString == '12') {
+        if (_hari == 'Minggu') {
+          siaran = "SEJENAK BERSAMA";
+        } else {
+          siaran = "REHAT SIANG";
+        }
+      } else if (_timeString == '13') {
+        if (_hari == 'Sabtu') {
+          siaran = "FBI";
+        } else if (_hari == 'Minggu') {
+          siaran = "SLANK MANIA";
+        } else {
+          siaran = "MUSIK INDO";
+        }
+      } else if (_timeString == '14' || _timeString == '15') {
+        if (_hari == 'Minggu') {
+          siaran = "MUSIKIDI (16.00-17.00) & IWAN FALS(17.00-18.00)";
+        } else {
+          siaran = "JJS";
+        }
+      } else if (_timeString == '16' || _timeString == '17') {
+        if (_hari == 'Sabtu') {
+          siaran = "RISALAH (18.30-19.00)";
+        } else if (_hari == 'Minggu') {
+          siaran = "REBANA LOKAL (18.30-19.00)";
+        } else {
+          siaran = "BAHANA SWARA KENDAL";
+        }
+      } else if (_timeString == '18') {
+        if (_hari == 'Minggu') {
+          siaran =
+              "Hikmah dibalik Kisah (19.00-20.00) & MIMBAR KRISTEN(20.00-20.30) & MIMBAR KATOLIK(20.30-21.00)";
+        } else {
+          siaran = "PLANET GAUL";
+        }
+      } else if (_timeString == '19' || _timeString == '20') {
+        if (_hari == 'Jumat') {
+          siaran = "KOESPLUS MANIA";
+        } else {
+          siaran = "MELODI KENANGAN";
+        }
+      } else if (_timeString == '21') {
+        if (_hari == 'Jumat') {
+          siaran = "LANOSDA";
+        } else {
+          siaran = "GADO GADO";
+        }
+      } else if (_timeString == '22' || _timeString == '23') {
+        siaran = "OFFLINE";
+      } else {
+        siaran = "OFFLINE";
+      }
+    }
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    return Container(
+      // padding: const EdgeInsets.all(10),
+      width: mediaQueryData.size.width,
+      height: mediaQueryData.size.height * 0.07,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              siaran,
+            ),
+          ),
         ],
       ),
     );
@@ -433,329 +663,9 @@ class _SwaraKendalState extends State<SwaraKendal> {
       ),
       body: ListView(children: [
         _tanggal(),
-        _card(),
+        // _card(),
+        _futureCard(),
         _info()
-        // child: Container(
-        //   width: mediaQueryData.size.width,
-        //   height: mediaQueryData.size.height * 0.15,
-        //   decoration: const BoxDecoration(
-        //     color: Colors.blue,
-        //     // borderRadius: BorderRadius.all(Radius.circular(30.0)),
-        //   ),
-        //   padding: const EdgeInsets.all(10),
-        // child: Column(
-        //   children: [
-        // Stack(
-        //   children: [
-        //     Container(
-        //       padding: const EdgeInsets.only(
-        //         top: 20,
-        //         left: 20,
-        //         right: 20,
-        //       ),
-        //       width: mediaQueryData.size.width,
-        //       height: mediaQueryData.size.height * 0.3,
-        //       decoration: const BoxDecoration(
-        //         color: Color(0xFFe97b65),
-        //         borderRadius: BorderRadius.all(Radius.circular(30.0)),
-        //       ),
-        //       child: Column(
-        //         mainAxisAlignment: MainAxisAlignment.start,
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           Row(
-        //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //             children: [
-        //               const Text(
-        //                 "Streaming Radio",
-        //                 style: TextStyle(
-        //                   color: Colors.white,
-        //                   fontSize: 25,
-        //                   fontWeight: FontWeight.bold,
-        //                 ),
-        //               ),
-        //               Text(
-        //                 formatedTanggal.toString(),
-        //                 style: const TextStyle(
-        //                   color: Colors.white,
-        //                   fontSize: 15,
-        //                   // fontWeight: FontWeight.bold,
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //           Padding(
-        //               padding: EdgeInsets.only(
-        //                   top: mediaQueryData.size.height * 0.01)),
-        //           const Text(
-        //             "Dengarkan siaran langsung \nRadio Swara Kendal",
-        //             style: TextStyle(
-        //               color: Colors.white,
-        //               fontSize: 15,
-        //               // fontWeight: FontWeight.bold,
-        //             ),
-        //           ),
-        //           // Text(formatedTanggal.toString()),
-        //           // Divider(
-        //           //   color: Colors.white,
-        //           //   height: mediaQueryData.size.height * 0.02,
-        //           //   endIndent: mediaQueryData.size.width * 0.4,
-        //           // ),
-        //           Padding(
-        //               padding: EdgeInsets.only(
-        //                   top: mediaQueryData.size.height * 0.03)),
-        //           Row(
-        //             mainAxisAlignment: MainAxisAlignment.start,
-        //             // crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               // videoPlayerController.value.isPlaying
-        //               //     ?
-        //               const SpinKitDoubleBounce(
-        //                 color: Colors.white,
-        //               ),
-        //               // :
-        //               // const SpinKitCircle(
-        //               //     color: Colors.white,
-        //               //     // size: 30,
-        //               //   ),
-        //               Padding(
-        //                   padding: EdgeInsets.only(
-        //                       left: mediaQueryData.size.height * 0.01)),
-        //               const Text(
-        //                 "93 FM",
-        //                 style: TextStyle(
-        //                   color: Colors.black54,
-        //                   fontSize: 30,
-        //                   fontWeight: FontWeight.bold,
-        //                 ),
-        //               ),
-        //             ],
-        //             // child:
-        //           ),
-        //           Padding(
-        //               padding: EdgeInsets.only(
-        //                   top: mediaQueryData.size.height * 0.02)),
-        //           ElevatedButton.icon(
-        //             // elevation: 0,
-        //             onPressed: () async {
-        //               const url =
-        //                   'https://api.whatsapp.com/send?phone=6282325709993&text=silahkan+ketik+nama%25alamat%25isipesan%25rekuest';
-        //               if (await canLaunch(url)) {
-        //                 await launch(url, forceSafariVC: false);
-        //               } else {
-        //                 throw 'Could not launch $url';
-        //               }
-        //             },
-        //             style: ElevatedButton.styleFrom(
-        //               shape: const RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.all(
-        //                   Radius.circular(30.0),
-        //                 ),
-        //               ),
-        //               primary: Colors.white,
-        //             ),
-
-        //             label: const Text(
-        //               'Request lagu',
-        //               style: TextStyle(
-        //                 color: Color(0xFFe97b65),
-        //               ),
-        //             ),
-        //             icon: const Icon(
-        //               Icons.multitrack_audio_sharp,
-        //               color: Color(0xFFe97b65),
-        //             ),
-        //             // textColor: Color(0xFFe97b65),
-        //             // splashColor: Colors.red,
-        //             // color: Colors.white,
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //     Positioned(
-        //       top: mediaQueryData.size.height * 0.04,
-        //       left: mediaQueryData.size.height * 0.25,
-        //       child: Image.asset(
-        //         'assets/logo/1.png',
-        //         width: 250.0,
-        //         height: 250.0,
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        // Padding(
-        //     padding:
-        //         EdgeInsets.only(top: mediaQueryData.size.height * 0.02)),
-        // Column(
-        //   // mainAxisAlignment: MainAxisAlignment.center,
-        //   // crossAxisAlignment: CrossAxisAlignment.center,
-        //   children: [
-        //     Row(
-        //       children: [
-        //         Text(
-        //           "Host " + _timeString,
-        //           style: TextStyle(
-        //             color: Colors.brown[800],
-        //             fontWeight: FontWeight.bold,
-        //             fontSize: 20,
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //     Padding(
-        //         padding: EdgeInsets.only(
-        //             top: mediaQueryData.size.height * 0.01)),
-        //   ],
-        // ),
-        // Padding(
-        //     padding:
-        //         EdgeInsets.only(top: mediaQueryData.size.height * 0.02)),
-        // Column(
-        //   // mainAxisAlignment: MainAxisAlignment.center,
-        //   // crossAxisAlignment: CrossAxisAlignment.center,
-        //   children: [
-        //     Row(
-        //       children: [
-        //         Text(
-        //           "Info ",
-        //           style: TextStyle(
-        //             color: Colors.brown[800],
-        //             fontWeight: FontWeight.bold,
-        //             fontSize: 20,
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //     Padding(
-        //         padding: EdgeInsets.only(
-        //             top: mediaQueryData.size.height * 0.01)),
-        //     Stack(
-        //       children: [
-        //         Container(
-        //           padding: const EdgeInsets.all(10),
-        //           width: mediaQueryData.size.width,
-        //           height: mediaQueryData.size.height * 0.1,
-        //           decoration: BoxDecoration(
-        //             color: Theme.of(context).primaryColor,
-        //             border: Border.all(color: Colors.grey, width: 1),
-        //             borderRadius:
-        //                 const BorderRadius.all(Radius.circular(20.0)),
-        //           ),
-        //           child: Row(
-        //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //             crossAxisAlignment: CrossAxisAlignment.center,
-        //             children: [
-        //               ElevatedButton.icon(
-        //                 // elevation: 0,
-        //                 onPressed: () async {
-        //                   const url = 'https://swarakendal.com/';
-        //                   if (await canLaunch(url)) {
-        //                     await launch(url, forceSafariVC: false);
-        //                   } else {
-        //                     throw 'Could not launch $url';
-        //                   }
-        //                 },
-        //                 style: ElevatedButton.styleFrom(
-        //                   elevation: 0,
-        //                   shape: const RoundedRectangleBorder(
-        //                     borderRadius: BorderRadius.all(
-        //                       Radius.circular(30.0),
-        //                     ),
-        //                   ),
-        //                   primary: const Color(0xFFe97b65),
-        //                 ),
-        //                 label: const Text(
-        //                   'Website',
-        //                   style: TextStyle(
-        //                     color: Colors.white,
-        //                   ),
-        //                 ),
-        //                 icon: const Icon(
-        //                   Icons.language,
-        //                   color: Colors.white,
-        //                   size: 20,
-        //                 ),
-        //                 // textColor: Color(0xFFe97b65),
-        //                 // splashColor: Colors.red,
-        //                 // color: Colors.white,
-        //               ),
-        //               ElevatedButton.icon(
-        //                 // elevation: 0,
-        //                 onPressed: () async {
-        //                   const url =
-        //                       'https://www.instagram.com/swarakendalfm/?hl=id';
-        //                   if (await canLaunch(url)) {
-        //                     await launch(url, forceSafariVC: false);
-        //                   } else {
-        //                     throw 'Could not launch $url';
-        //                   }
-        //                 },
-        //                 style: ElevatedButton.styleFrom(
-        //                   elevation: 0,
-        //                   shape: const RoundedRectangleBorder(
-        //                     borderRadius: BorderRadius.all(
-        //                       Radius.circular(30.0),
-        //                     ),
-        //                   ),
-        //                   primary: const Color(0xFFe97b65),
-        //                 ),
-        //                 label: const Text(
-        //                   'Instagram',
-        //                   style: TextStyle(
-        //                     color: Colors.white,
-        //                   ),
-        //                 ),
-        //                 icon: const FaIcon(
-        //                   FontAwesomeIcons.instagram,
-        //                   color: Colors.white,
-        //                   size: 20,
-        //                 ),
-        //                 // textColor: Color(0xFFe97b65),
-        //                 // splashColor: Colors.red,
-        //                 // color: Colors.white,
-        //               ),
-        //               ElevatedButton.icon(
-        //                 // elevation: 0,
-        //                 onPressed: () async {
-        //                   const url = 'tel://082325709993';
-        //                   if (await canLaunch(url)) {
-        //                     await launch(url, forceSafariVC: false);
-        //                   } else {
-        //                     throw 'Could not launch $url';
-        //                   }
-        //                 },
-        //                 style: ElevatedButton.styleFrom(
-        //                   elevation: 0,
-        //                   shape: const RoundedRectangleBorder(
-        //                     borderRadius: BorderRadius.all(
-        //                       Radius.circular(30.0),
-        //                     ),
-        //                   ),
-        //                   primary: const Color(0xFFe97b65),
-        //                 ),
-        //                 label: const Text(
-        //                   'Telepon',
-        //                   style: TextStyle(
-        //                     color: Colors.white,
-        //                   ),
-        //                 ),
-        //                 icon: const Icon(
-        //                   Icons.phone,
-        //                   color: Colors.white,
-        //                   size: 20,
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ],
-        // ),
-        // _futureCard(),
-        //   ],
-        // ),
-        // ),
       ]),
     );
   }
@@ -771,7 +681,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
           Row(
             children: [
               Text(
-                "Sapa Kami ",
+                "Sapa Kami " + _hari + _timeString,
                 style: TextStyle(
                   color: Colors.brown[800],
                   fontWeight: FontWeight.bold,
@@ -1036,7 +946,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
-            child: cardBerita2(),
+            child: _card(),
           );
         } else {
           return const Text("loading");
@@ -1047,25 +957,28 @@ class _SwaraKendalState extends State<SwaraKendal> {
 
   Widget cardBerita2() {
     var warna;
-    if (_timeString == '17') {
-      warna = const Text(
-        "Senin",
-        style: TextStyle(
-          fontSize: 14.0,
-          fontWeight: FontWeight.bold,
-          color: Colors.green,
-        ),
-      );
-    } else {
-      warna = const Text(
-        "Selasa",
-        style: TextStyle(
-          fontSize: 14.0,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      );
+    if (_hari == 'Senin') {
+      if (_timeString == '06' || _timeString == '07') {
+        warna = const Text(
+          "Senin",
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.green,
+          ),
+        );
+      } else {
+        warna = const Text(
+          "Selasa",
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        );
+      }
     }
+
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -1114,17 +1027,4 @@ class _SwaraKendalState extends State<SwaraKendal> {
       ),
     );
   }
-
-  // Widget slider() {
-  //   return Slider.adaptive(
-  //     min: 0.0,
-  //     value: position.inSeconds.toDouble(),
-  //     max: duration.inSeconds.toDouble(),
-  //     onChanged: (double value) {
-  //       setState(() {
-  //         audioPlayer.seek(Duration(seconds: value.toInt()));
-  //       });
-  //     },
-  //   );
-  // }
 }
