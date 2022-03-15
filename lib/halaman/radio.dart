@@ -237,11 +237,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
                         // Navigator.pushNamed(context, '/MyApp');
                       },
                     ),
-                    // :
-                    // const SpinKitCircle(
-                    //     color: Colors.white,
-                    //     // size: 30,
-                    //   ),
+                    //Remove code spinkit
                     Padding(
                         padding: EdgeInsets.only(
                             left: mediaQueryData.size.height * 0.01)),
