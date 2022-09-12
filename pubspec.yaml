@@ -39,10 +39,11 @@ dependencies:
   url_launcher: ^6.0.20
   wakelock: ^0.6.1+2
   intl: ^0.17.0
-  flutter_html: ^2.2.1
+  # flutter_html: ^2.2.1
   font_awesome_flutter: ^9.2.0
-  audioplayers: ^0.20.1
+  # audioplayers: ^0.20.1
   marquee: ^2.2.1
+  radio_player: ^1.0.1
 
 
 
