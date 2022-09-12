@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:swarakendal/splashscreen/splashscreen.dart';
-
-import 'halaman/cek.dart';
+// import 'halaman/cek.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(

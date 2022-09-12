@@ -1,10 +1,13 @@
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
+import 'package:radio_player/radio_player.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,13 +21,38 @@ class SwaraKendal extends StatefulWidget {
 }
 
 class _SwaraKendalState extends State<SwaraKendal> {
-  AudioPlayer audioPlayer = AudioPlayer();
+  //REVIEW
+  final RadioPlayer _radioPlayer = RadioPlayer();
+  bool isPlaying = false;
+  List<String>? metadata;
+
+  void initRadioPlayer() {
+    _radioPlayer.setChannel(
+      title: 'Radio Player',
+      url: "http://i.klikhost.com/8822/stream/",
+      imagePath: 'assets/logo/logo1.png',
+    );
+
+    _radioPlayer.stateStream.listen((value) {
+      setState(() {
+        isPlaying = value;
+      });
+    });
+
+    _radioPlayer.metadataStream.listen((value) {
+      setState(() {
+        metadata = value;
+      });
+    });
+  }
+
+  // AudioPlayer audioPlayer = AudioPlayer();
 
   void getAudio() async {
-    var url = "http://i.klikhost.com/8822/stream/";
-    setState(() {
-      audioPlayer.play(url);
-    });
+    // var url = "http://i.klikhost.com/8822/stream/";
+    // setState(() {
+    //   audioPlayer.play(url);
+    // });
   }
 
   static var today = DateTime.now();
@@ -67,7 +95,9 @@ class _SwaraKendalState extends State<SwaraKendal> {
         },
       );
     }
-    print("jam" + _timeString);
+    if (kDebugMode) {
+      print("jam" + _timeString);
+    }
     return formattedDateTime;
   }
 
@@ -102,7 +132,9 @@ class _SwaraKendalState extends State<SwaraKendal> {
   @override
   void initState() {
     super.initState();
-    getAudio();
+    // getAudio();
+    //REVIEW
+    initRadioPlayer();
     _getDay();
     _getHari();
     initializeDateFormatting();
@@ -234,7 +266,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
                         size: 30,
                       ),
                       onPressed: () {
-                        // Navigator.pushNamed(context, '/MyApp');
+                        Navigator.pushNamed(context, '/MyApp');
                       },
                     ),
                     //Remove code spinkit
@@ -297,13 +329,57 @@ class _SwaraKendalState extends State<SwaraKendal> {
             ),
           ),
           Positioned(
-            top: mediaQueryData.size.height * 0.04,
-            left: mediaQueryData.size.height * 0.25,
-            child: Image.asset(
-              'assets/logo/1.png',
-              width: 250.0,
-              height: 250.0,
+            top: mediaQueryData.size.height * 0.05,
+            left: mediaQueryData.size.height * 0.28,
+            child: Column(
+              children: [
+                FutureBuilder(
+                  future: _radioPlayer.getArtworkImage(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    Image artwork;
+                    if (snapshot.hasData) {
+                      artwork = snapshot.data;
+                    } else {
+                      artwork = Image.asset(
+                        'assets/logo/logo1.png',
+                        fit: BoxFit.cover,
+                      );
+                    }
+                    return SizedBox(
+                      height: 120,
+                      width: 120,
+                      child: ClipRRect(
+                        child: artwork,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    );
+                  },
+                ),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: mediaQueryData.size.height * 0.01)),
+                ElevatedButton(
+                  onPressed: () {
+                    isPlaying ? _radioPlayer.pause() : _radioPlayer.play();
+                  },
+                  child: Icon(
+                    isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                    color: const Color(0xFFe97b65),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(15),
+                    primary: Theme.of(context).primaryColor, // <-- Button color
+                    // onPrimary: Colors.red, // <-- Splash color
+                  ),
+                )
+              ],
             ),
+            // child: Image.asset(
+            //   'assets/logo/1.png',
+            //   width: 250.0,
+            //   height: 250.0,
+            // ),
           ),
         ],
       ),
@@ -315,7 +391,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
     return Container(
       padding: const EdgeInsets.all(10),
       width: mediaQueryData.size.width,
-      height: mediaQueryData.size.height * 0.29,
+      height: mediaQueryData.size.height * 0.28,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(20.0)),
@@ -654,6 +730,17 @@ class _SwaraKendalState extends State<SwaraKendal> {
             fontSize: 26,
           ),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.power_settings_new_rounded,
+              color: Colors.brown[800],
+            ),
+            onPressed: () {
+              SystemNavigator.pop();
+            },
+          )
+        ],
         backgroundColor: Theme.of(context).primaryColor,
         // backgroundColor: Colors.white,
       ),
@@ -663,6 +750,15 @@ class _SwaraKendalState extends State<SwaraKendal> {
         _futureCard(),
         _info()
       ]),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     isPlaying ? _radioPlayer.pause() : _radioPlayer.play();
+      //   },
+      //   tooltip: 'Control button',
+      //   child: Icon(
+      //     isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+      //   ),
+      // ),
     );
   }
 
@@ -677,7 +773,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
           Row(
             children: [
               Text(
-                "Sapa Kami " + _hari + _timeString,
+                "Sapa Kami ",
                 style: TextStyle(
                   color: Colors.brown[800],
                   fontWeight: FontWeight.bold,
