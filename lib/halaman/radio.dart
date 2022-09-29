@@ -288,13 +288,21 @@ class _SwaraKendalState extends State<SwaraKendal> {
                 ElevatedButton.icon(
                   // elevation: 0,
                   onPressed: () async {
-                    const url =
-                        'https://api.whatsapp.com/send?phone=6282325709993&text=silahkan+ketik+nama%25alamat%25isipesan%25rekuest';
-                    if (await canLaunch(url)) {
-                      await launch(url, forceSafariVC: false);
-                    } else {
+                    final Uri url = Uri.parse(
+                        'https://api.whatsapp.com/send?phone=6282325709993&text=silahkan+ketik+nama%25alamat%25isipesan%25rekuest');
+                    if (!await launchUrl(
+                      url,
+                      mode: LaunchMode.externalApplication,
+                    )) {
                       throw 'Could not launch $url';
                     }
+                    // const url =
+                    //     'https://api.whatsapp.com/send?phone=6282325709993&text=silahkan+ketik+nama%25alamat%25isipesan%25rekuest';
+                    // if (await canLaunch(url)) {
+                    //   await launch(url, forceSafariVC: false);
+                    // } else {
+                    //   throw 'Could not launch $url';
+                    // }
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const RoundedRectangleBorder(
@@ -812,12 +820,19 @@ class _SwaraKendalState extends State<SwaraKendal> {
                           size: 20,
                         ),
                         onPressed: () async {
-                          const url = 'https://swarakendal.com/';
-                          if (await canLaunch(url)) {
-                            await launch(url, forceSafariVC: false);
-                          } else {
+                          final Uri url = Uri.parse('https://swarakendal.com/');
+                          if (!await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          )) {
                             throw 'Could not launch $url';
                           }
+                          // const url = 'https://swarakendal.com/';
+                          // if (await canLaunch(url)) {
+                          //   await launch(url, forceSafariVC: false);
+                          // } else {
+                          //   throw 'Could not launch $url';
+                          // }
                         },
                       ),
                     ),
@@ -836,13 +851,21 @@ class _SwaraKendalState extends State<SwaraKendal> {
                           size: 20,
                         ),
                         onPressed: () async {
-                          const url =
-                              'https://www.facebook.com/radioswarakendalfm';
-                          if (await canLaunch(url)) {
-                            await launch(url, forceSafariVC: false);
-                          } else {
+                          final Uri url = Uri.parse(
+                              'https://www.facebook.com/radioswarakendalfm');
+                          if (!await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          )) {
                             throw 'Could not launch $url';
                           }
+                          // const url =
+                          //     'https://www.facebook.com/radioswarakendalfm';
+                          // if (await canLaunch(url)) {
+                          //   await launch(url, forceSafariVC: false);
+                          // } else {
+                          //   throw 'Could not launch $url';
+                          // }
                         },
                       ),
                     ),
@@ -861,13 +884,21 @@ class _SwaraKendalState extends State<SwaraKendal> {
                           size: 20,
                         ),
                         onPressed: () async {
-                          const url =
-                              'https://www.youtube.com/channel/UCKHCg8Kghp2C1GbAuExqBVA';
-                          if (await canLaunch(url)) {
-                            await launch(url, forceSafariVC: false);
-                          } else {
+                          final Uri url = Uri.parse(
+                              'https://www.youtube.com/channel/UCKHCg8Kghp2C1GbAuExqBVA');
+                          if (!await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          )) {
                             throw 'Could not launch $url';
                           }
+                          // const url =
+                          //     'https://www.youtube.com/channel/UCKHCg8Kghp2C1GbAuExqBVA';
+                          // if (await canLaunch(url)) {
+                          //   await launch(url, forceSafariVC: false);
+                          // } else {
+                          //   throw 'Could not launch $url';
+                          // }
                         },
                       ),
                     ),
@@ -920,13 +951,21 @@ class _SwaraKendalState extends State<SwaraKendal> {
                           size: 20,
                         ),
                         onPressed: () async {
-                          const url =
-                              'https://www.instagram.com/swarakendalfm/?hl=id';
-                          if (await canLaunch(url)) {
-                            await launch(url, forceSafariVC: false);
-                          } else {
+                          final Uri url = Uri.parse(
+                              'https://www.instagram.com/swarakendalfm/?hl=id');
+                          if (!await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          )) {
                             throw 'Could not launch $url';
                           }
+                          // const url =
+                          //     'https://www.instagram.com/swarakendalfm/?hl=id';
+                          // if (await canLaunch(url)) {
+                          //   await launch(url, forceSafariVC: false);
+                          // } else {
+                          //   throw 'Could not launch $url';
+                          // }
                         },
                       ),
                     ),
@@ -945,13 +984,21 @@ class _SwaraKendalState extends State<SwaraKendal> {
                           color: Colors.white,
                         ),
                         onPressed: () async {
-                          const url =
-                              'https://api.whatsapp.com/send?phone=6282325709993&text=Halo+swara+kendal';
-                          if (await canLaunch(url)) {
-                            await launch(url, forceSafariVC: false);
-                          } else {
+                          final Uri url = Uri.parse(
+                              'https://api.whatsapp.com/send?phone=6282325709993&text=Halo+swara+kendal');
+                          if (!await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          )) {
                             throw 'Could not launch $url';
                           }
+                          // const url =
+                          //     'https://api.whatsapp.com/send?phone=6282325709993&text=Halo+swara+kendal';
+                          // if (await canLaunch(url)) {
+                          //   await launch(url, forceSafariVC: false);
+                          // } else {
+                          //   throw 'Could not launch $url';
+                          // }
                         },
                       ),
                     ),
