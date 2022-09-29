@@ -1,6 +1,4 @@
 import 'dart:async';
-
-// import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -304,7 +302,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
                         Radius.circular(30.0),
                       ),
                     ),
-                    primary: Colors.white,
+                    backgroundColor: Colors.white,
                   ),
 
                   label: const Text(
@@ -360,7 +358,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
                         top: mediaQueryData.size.height * 0.01)),
                 ElevatedButton(
                   onPressed: () {
-                    isPlaying ? _radioPlayer.pause() : _radioPlayer.play();
+                    isPlaying ? _radioPlayer.stop() : _radioPlayer.play();
                   },
                   child: Icon(
                     isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
@@ -368,8 +366,8 @@ class _SwaraKendalState extends State<SwaraKendal> {
                   ),
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(15),
-                    primary: Theme.of(context).primaryColor, // <-- Button color
+                    backgroundColor: Theme.of(context).primaryColor,
+                    padding: const EdgeInsets.all(15), // <-- Button color
                     // onPrimary: Colors.red, // <-- Splash color
                   ),
                 )
@@ -413,7 +411,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
                       Radius.circular(10.0),
                     ),
                   ),
-                  primary: const Color(0xFFe97b65),
+                  backgroundColor: const Color(0xFFe97b65),
                 ),
                 label: const Text(
                   'Siaran saat ini',
@@ -455,7 +453,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
                       Radius.circular(10.0),
                     ),
                   ),
-                  primary: Colors.grey,
+                  backgroundColor: Colors.grey,
                 ),
                 label: const Text(
                   'Acara Selanjutnya',
@@ -707,7 +705,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    // MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
         // centerTitle: true,
@@ -932,41 +930,7 @@ class _SwaraKendalState extends State<SwaraKendal> {
                         },
                       ),
                     ),
-                    // ElevatedButton.icon(
-                    //   // elevation: 0,
-                    //   onPressed: () async {
-                    //     const url =
-                    //         'https://www.instagram.com/swarakendalfm/?hl=id';
-                    //     if (await canLaunch(url)) {
-                    //       await launch(url, forceSafariVC: false);
-                    //     } else {
-                    //       throw 'Could not launch $url';
-                    //     }
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     elevation: 0,
-                    //     shape: const RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.all(
-                    //         Radius.circular(30.0),
-                    //       ),
-                    //     ),
-                    //     primary: const Color(0xFFe97b65),
-                    //   ),
-                    //   label: const Text(
-                    //     'Instagram',
-                    //     style: TextStyle(
-                    //       color: Colors.white,
-                    //     ),
-                    //   ),
-                    //   icon: const FaIcon(
-                    //     FontAwesomeIcons.instagram,
-                    //     color: Colors.white,
-                    //     size: 20,
-                    //   ),
-                    //   // textColor: Color(0xFFe97b65),
-                    //   // splashColor: Colors.red,
-                    //   // color: Colors.white,
-                    // ),
+
                     Container(
                       decoration: const BoxDecoration(
                         color: Color(0xFFe97b65),
@@ -991,37 +955,6 @@ class _SwaraKendalState extends State<SwaraKendal> {
                         },
                       ),
                     ),
-                    // ElevatedButton.icon(
-                    //   // elevation: 0,
-                    //   onPressed: () async {
-                    //     const url = 'tel://082325709993';
-                    //     if (await canLaunch(url)) {
-                    //       await launch(url, forceSafariVC: false);
-                    //     } else {
-                    //       throw 'Could not launch $url';
-                    //     }
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     elevation: 0,
-                    //     shape: const RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.all(
-                    //         Radius.circular(30.0),
-                    //       ),
-                    //     ),
-                    //     primary: const Color(0xFFe97b65),
-                    //   ),
-                    //   label: const Text(
-                    //     'Telepon',
-                    //     style: TextStyle(
-                    //       color: Colors.white,
-                    //     ),
-                    //   ),
-                    //   icon: const Icon(
-                    //     Icons.phone,
-                    //     color: Colors.white,
-                    //     size: 20,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
